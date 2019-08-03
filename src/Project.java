@@ -3,7 +3,9 @@ import java.util.Scanner;
 public class Project {
 
 	public static void main(String[] args) {
-	
+		if(args==null||args.length==0) {
+			args=new String[] {"train.csv"};
+		}
 		int choice;
 		MahalanobisDistance mahalanobisDistance = new MahalanobisDistance(args[0]);
 		System.out.println("File = "+ args[0]);

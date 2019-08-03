@@ -19,8 +19,11 @@ public class MahalanobisDistance {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		URL location = classLoader.getResource(file);
 		File filelocation = new File(location.getPath());
+		//读取原始数据
 		double data[][]= mahalanobis.readAllDataAtOnce(filelocation.toString());
+		//计算协方差矩阵
 		double covarianceMatrix[][] = mahalanobis.getCovarianceMatrix(data);
+		//计算平均值矩阵
 		double meanMatrix[][] = matrixOperation.mean(data,0);
 		
 		System.out.println("*****************************Printing Data*****************************");
@@ -52,6 +55,12 @@ public class MahalanobisDistance {
 		}
 		
 	}
+	/**
+	 * 给定两个样板，基于当前样板的统计特征，计算两个样本的差异
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
 	public double getDissimilarityMeasure(double v1[],double v2[])
 	{
 		double m1[][] = new double [1][v1.length];
@@ -65,11 +74,18 @@ public class MahalanobisDistance {
 		}
 		
 		MatrixOperation matrixOperation = new MatrixOperation();
-		double squaredAnswer[][] = matrixOperation.multiply(matrixOperation.multiply(matrixOperation.subtract(m1, m2), matrixOperation.invert(matrixOperation.getArrayFromList(covariance))),matrixOperation.transpose(matrixOperation.subtract(m1, m2)));
+		double squaredAnswer[][] = matrixOperation.multiply(
+				matrixOperation.multiply(matrixOperation.subtract(m1, m2), matrixOperation.invert(matrixOperation.getArrayFromList(covariance))),
+				
+				matrixOperation.transpose(matrixOperation.subtract(m1, m2)));
 		double ans = Math.sqrt(squaredAnswer[0][0]);
 		return ans;
 	}
-	
+	/**
+	 * 给定一个多维数组的样本，计算它和本样板的距离
+	 * @param v
+	 * @return
+	 */
 	public double getDistance(double v[])
 	{
 		double m1[][] = new double [1][v.length];
